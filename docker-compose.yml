@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  api:
+    # Nome do contêiner para fácil identificação.
+    container_name: api
+
+    # Indica para o Compose buildar a imagem a partir do Dockerfile
+    # no diretório atual ('.').
+    build: .
+
+    # Mapeia a porta 8000 do seu computador (host) para a porta 8000 do contêiner,
+    # que é onde o Uvicorn está rodando.
+    ports:
+      - "8000:8000"
+
+    # Monta o diretório atual do projeto (no host) para o diretório /app (no contêiner).
+    # Isso permite que as alterações no código sejam refletidas instantaneamente
+    # no contêiner. O arquivo do banco de dados (escola.db) também será persistido aqui.
+    volumes:
+      - .:/app
+
+    # Sobrescreve o CMD do Dockerfile para adicionar o --reload em desenvolvimento.
+    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
